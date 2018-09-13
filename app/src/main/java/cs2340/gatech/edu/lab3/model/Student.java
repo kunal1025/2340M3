@@ -33,6 +33,9 @@ public class Student implements Parcelable {
     /** this students major */
     private String _major;
 
+    /** this students classStanding */
+    private ClassStanding _classStanding;
+
 
     /* **********************
      * Getters and setters
@@ -45,6 +48,9 @@ public class Student implements Parcelable {
 
     public String getMajor() {return _major; }
     public void setMajor(String major) { _major = major; }
+
+    public ClassStanding getClassStanding() {return _classStanding;}
+    public void setClassStanding(ClassStanding classStanding) { _classStanding = classStanding;}
 
     /**
      * Lookup a major based on its code.  Returns the postion of that
@@ -63,6 +69,18 @@ public class Student implements Parcelable {
         return 0;
     }
 
+    /**
+     * Make a new student
+     * @param name      the student's name
+     * @param major     the student's major
+     * @param classStanding the student's class standing
+     */
+    public Student(String name, String major, ClassStanding classStanding) {
+        _name = name;
+        _major= major;
+        _id = Student.Next_Id++;
+        _classStanding = classStanding;
+    }
 
     /**
      * Make a new student
@@ -70,9 +88,7 @@ public class Student implements Parcelable {
      * @param major     the student's major
      */
     public Student(String name, String major) {
-        _name = name;
-        _major= major;
-        _id = Student.Next_Id++;
+        this(name, major, ClassStanding.FRESHMAN);
     }
 
     /**
@@ -89,7 +105,7 @@ public class Student implements Parcelable {
      */
     @Override
     public String toString() {
-        return _name + " " + _major;
+        return _name + " " + _major + " " + _classStanding.toString();
     }
 
 
@@ -113,6 +129,7 @@ public class Student implements Parcelable {
         _name = in.readString();
         _major = in.readString();
         _id = in.readInt();
+        _classStanding = (ClassStanding) in.readSerializable();
 
 
     }
@@ -132,6 +149,7 @@ public class Student implements Parcelable {
          dest.writeString(_name);
          dest.writeString(_major);
          dest.writeInt(_id);
+         dest.writeSerializable(_classStanding);
 
 
     }
