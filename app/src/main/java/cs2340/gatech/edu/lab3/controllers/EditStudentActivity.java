@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import cs2340.gatech.edu.lab3.R;
+import cs2340.gatech.edu.lab3.model.ClassStanding;
 import cs2340.gatech.edu.lab3.model.Model;
 import cs2340.gatech.edu.lab3.model.Student;
 
@@ -26,6 +27,7 @@ public class EditStudentActivity extends AppCompatActivity implements AdapterVie
     private TextView idField;
     private EditText nameField;
     private Spinner majorSpinner;
+    private Spinner classStandingSpinner;
 
     /* ************************
        Keeping track of spinner changes.  Not really used right now, probably don't need this.
@@ -46,10 +48,10 @@ public class EditStudentActivity extends AppCompatActivity implements AdapterVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_student);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,9 +63,10 @@ public class EditStudentActivity extends AppCompatActivity implements AdapterVie
         /**
          * Grab the dialog widgets so we can get info for later
          */
-        nameField = (EditText) findViewById(R.id.student_name_input);
-        majorSpinner = (Spinner) findViewById(R.id.spinner);
-        idField = (TextView) findViewById(R.id.student_id_field);
+        nameField = findViewById(R.id.student_name_input);
+        majorSpinner = findViewById(R.id.spinner);
+        classStandingSpinner = findViewById(R.id.classStandingSpinner);
+        idField = findViewById(R.id.student_id_field);
 
         /*
           Set up the adapter to display the allowable majors in the spinner
@@ -73,11 +76,19 @@ public class EditStudentActivity extends AppCompatActivity implements AdapterVie
         majorSpinner.setAdapter(adapter);
 
         /*
+           Set up adapter to display the allowable class standings in the spinner
+         */
+        ArrayAdapter<ClassStanding> classStandingAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, ClassStanding.values());
+        classStandingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        classStandingSpinner.setAdapter(classStandingAdapter);
+
+        /*
            If a student has been passed in, this was an edit, if not, this is a new add
          */
         if (getIntent().hasExtra(CourseDetailFragment.ARG_STUDENT_ID)) {
-            _student = (Student) getIntent().getParcelableExtra(CourseDetailFragment.ARG_STUDENT_ID);
+            _student = getIntent().getParcelableExtra(CourseDetailFragment.ARG_STUDENT_ID);
             majorSpinner.setSelection(Student.findPosition(_student.getMajor()));
+            classStandingSpinner.setSelection(_student.getClassStanding().ordinal());
             editing = true;
         } else {
             _student = new Student();
@@ -99,6 +110,7 @@ public class EditStudentActivity extends AppCompatActivity implements AdapterVie
 
         _student.setName(nameField.getText().toString());
         _student.setMajor((String) majorSpinner.getSelectedItem());
+        _student.setClassStanding((ClassStanding) classStandingSpinner.getSelectedItem());
 
         Log.d("Edit", "Got new student data: " + _student);
         if (!editing) {

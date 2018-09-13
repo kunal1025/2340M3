@@ -76,7 +76,7 @@
         android:layout_alignParentBottom="false"
         android:layout_alignParentTop="false"
         android:layout_alignStart="@+id/student_id_field"
-        android:layout_below="@+id/ClassStandingSpinner"
+        android:layout_below="@+id/classStandingSpinner"
         android:layout_marginTop="32dp"
         android:onClick="onAddPressed"
         android:text="Add" />
@@ -93,7 +93,7 @@
         android:text="Class Standing" />
 
     <Spinner
-        android:id="@+id/ClassStandingSpinner"
+        android:id="@+id/classStandingSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="false"
